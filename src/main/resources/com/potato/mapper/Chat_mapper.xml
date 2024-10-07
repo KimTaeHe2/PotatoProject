@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE mapper 
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.potato.mapper.Chat_mapper">
+
+<!-- 1.채팅방 리스트 가져오기 -->
+<select id="room_list" resultType="Chat_roomVO">
+<![CDATA[
+SELECT * FROM chat_room WHERE buyer_number = #{member_number} OR celler_number = #{member_number}
+]]>
+</select>
+
+<!-- 2.채팅방 번호 가져오기 -->
+<select id="get_room" resultType="ChatVO">
+<![CDATA[
+SELECT chat_number 
+FROM chat_room 
+WHERE (buyer_number, celler_number,board_number) 
+IN ((#{buyer_number}, #{celler_number},#{board_number}), (#{celler_number}, #{buyer_number},#{board_number}))
+]]>
+</select>
+
+<!-- 3.채팅방 만들기 -->
+<insert id="add_room">
+insert into chat_room(chat_number,buyer_number, celler_number,board_number) 
+values(#{chat_number},#{buyer_number},#{celler_number},#{board_number})
+</insert>
+
+
+<!-- 4.채팅내역 가져오기 -->
+<select id="list" resultType="ChatVO">
+<![CDATA[
+SELECT *
+    FROM chat WHERE chat_number = #{chat_number} order by chat_number desc
+]]>
+</select>
+
+<!-- 5.채팅 입력하기 -->
+<insert id="add_chat">
+insert into chat(chat_number,sender,content) 
+values(#{chat_number},#{sender},#{content})
+</insert>
+
+<!-- 6.채팅 삭제하기 -->
+<insert id="delete_chat">
+<![CDATA[
+delete from chat where time_stamp=#{time_stamp} and sender=#{sender} and chat_number=#{chat_number}
+]]>
+</insert>
+
+<!-- 7.채팅방 번호로 참여자 불러오기 -->
+<select id="find_chat" resultType="Chat_roomVO">
+<![CDATA[
+select * from chat_room where chat_number=#{chat_number}
+]]>
+</select>
+
+<!-- 8.채팅방 번호로 status 변경하기 -->
+<update id="set_status">
+<![CDATA[
+update chat_room set status=#{status} where chat_number=#{chat_number}
+]]>
+</update>
+
+</mapper>
+

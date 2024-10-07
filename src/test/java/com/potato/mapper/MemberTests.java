@@ -11,9 +11,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.potato.domain.BoardVO;
 import com.potato.domain.MemberVO;
-import com.potato.domain.MylistVO;
 import com.potato.domain.UserVO;
 import com.potato.mapper.Member_mapper;
+import com.potato.domain.Chat_roomVO;
 
 import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
@@ -25,6 +25,7 @@ public class MemberTests {
 	
 	@Setter(onMethod_ = @Autowired) // 생성자 자동 주입
 	private Member_mapper mapper;
+	private Chat_mapper cmapper;
 	
 	@Test
 	public void test() {
@@ -45,6 +46,18 @@ public class MemberTests {
 		System.out.println("실행");
 	}
 	
+	@Test
+	public void room_list() {
+		MemberVO member = new MemberVO();
+		member.setMember_number("01J72QVJ83E3YEVWK8JRCKXAZE");
+		cmapper.room_list(member);
+	}
+	
+	@Test
+	public void get_room() {
+	}
+	
+
 	@Test
 	public void login() {
 		MemberVO member = new MemberVO();
@@ -68,7 +81,7 @@ public class MemberTests {
 		UserVO user = new UserVO();
 		MemberVO member = new MemberVO();
 		member.setMember_number("01J6TP08EPYFFXJYAAMJ9KV2QW");
-		user = mapper.mypage(member);
+		member = mapper.mypage(member);
 	}
 	
 	@Test

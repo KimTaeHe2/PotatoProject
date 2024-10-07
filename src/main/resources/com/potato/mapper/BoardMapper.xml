@@ -8,15 +8,36 @@
 
 <select id="getList" resultType="BoardVO"> <!-- id:메서드명, resultType:객체 -->
 	<![CDATA[
-		select * from board where board_number > 0
+		SELECT * FROM board 
+		WHERE board_number > 0
+		ORDER BY 
+		    CASE 
+	        WHEN status = '판매중' THEN 1
+	        WHEN status = '예약중' THEN 2
+	        WHEN status = '판매완료' THEN 3
+	        ELSE 4
+    END
 	]]> <!-- CDATA 사용 이유는 부등호인지 문자인지를 판단하지 말것 (문자처리) -->
 </select>
 
-<insert id="insert" parameterType="java.lang.Object">
+<select id="getImage" resultType="ImageSlideVO"> <!-- id:메서드명, resultType:객체 -->
 	<![CDATA[
-		insert into board (board_number, types, title, content, writer, writer_number, status, photo_name, price, likes, interest, views)
-		values (seq_board.nextval, #{types}, #{title}, #{content}, #{writer}, #{writer_number}, '판매중', #{photo_name, jdbcType=VARCHAR}, #{price}, 0, 0, 0)
+		select * from image where board_number = #{board_number}
+	]]> <!-- CDATA 사용 이유는 부등호인지 문자인지를 판단하지 말것 (문자처리) -->
+</select>
+
+<insert id="insert">
+	<![CDATA[
+		insert into board (board_number, types, title, content, writer, writer_number, board_address, status, photo_name, price, likes, interest, views)
+		values (seq_board.nextval, #{types}, #{title}, #{content}, #{writer}, #{writer_number}, #{board_address}, '판매중', #{photo_name}, #{price}, 0, 0, 0)
 	]]> 
+</insert>
+
+<insert id="image">
+	<![CDATA[
+	 insert into image (board_number, photo_name)
+	 values (#{board_number}, #{photo_name})
+	]]>
 </insert>
 
 <select id="read" resultType="BoardVO">
@@ -26,10 +47,17 @@
 
 </select>
 
-<update id="update" parameterType="java.lang.Object">
+<select id="imageUtil" resultType="BoardVO">
+	<![CDATA[
+		select * from board where photo_name = #{photo_name}
+	]]>
+
+</select>
+
+<update id="update">
 	<![CDATA[
 		update board set
-		types = #{types}, title = #{title}, content = #{content}, status = #{status}, photo_name = #{photo_name, jdbcType=VARCHAR}, updatedate = sysdate,
+		types = #{types}, title = #{title}, content = #{content}, status = #{status}, photo_name = #{photo_name}, updatedate = sysdate,
 		price = #{price} where board_number = #{board_number}
 	]]>
 </update>
@@ -39,6 +67,24 @@
 		delete from board where board_number = #{board_number}
 	]]>
 </delete>
+
+<delete id="imageDelete">
+	<![CDATA[
+		delete from image where board_number = #{board_number}
+	]]>
+</delete>
+
+<select id="search" resultType="BoardVO">
+	<![CDATA[ 
+		select * from board where title LIKE '%' || #{title} || '%'
+	]]>
+</select>
+
+<select id="search1" resultType="BoardVO">
+	<![CDATA[ 
+		select * from board where types = #{types} and title LIKE '%' || #{title} || '%'
+	]]>
+</select>
 
 <update id="updateLikes">
 	<![CDATA[
@@ -54,11 +100,167 @@
 	]]>
 </update>
 
+<update id="cancelLikes">
+	<![CDATA[
+		update board set
+		likes = likes-1 where board_number = #{board_number}
+	]]>
+</update>
+
+<update id="cancelInterest">
+	<![CDATA[
+		update board set
+		interest = interest-1 where board_number = #{board_number}
+	]]>
+</update>
+
 <update id="updateViews">
 	<![CDATA[
 		update board set
 		views = views+1 where board_number = #{board_number}
 	]]>
 </update>
+
+<update id="cancelViews">
+	<![CDATA[
+		update board set
+		views = views-1 where board_number = #{board_number}
+	]]>
+</update>
+
+<insert id="insertLike">
+	<![CDATA[
+		insert into cart(likes_member_number,likes_board_number,likes)
+			values(#{likes_member_number},#{likes_board_number},1)
+	]]>
+</insert>
+
+<insert id="insertInterest">
+	<![CDATA[
+		insert into cart (likes_member_number, likes_board_number, interest)
+			values(#{likes_member_number}, #{likes_board_number},1)
+	]]>
+</insert>
+
+<update id="insert_both">
+	<![CDATA[
+		update cart set likes=1,interest=1 
+		where likes_member_number=#{likes_member_number} 
+		and likes_board_number = #{likes_board_number}
+	]]>
+</update>
+
+<update id="cancelLike">
+	<![CDATA[
+		update cart set likes=0,interest=1 
+		where likes_member_number=#{likes_member_number} 
+		and likes_board_number = #{likes_board_number}
+	]]>
+</update>
+
+<update id="cancelInterest2">
+	<![CDATA[
+		update cart set likes=1,interest=0 
+		where likes_member_number=#{likes_member_number} 
+		and likes_board_number = #{likes_board_number}
+	]]>
+</update>
+
+<delete id="cancel_both">
+	<![CDATA[
+		delete from cart
+		where likes_member_number=#{likes_member_number} 
+		and likes_board_number = #{likes_board_number}
+	]]>
+</delete>
+
+<select id="get_cart" resultType="CartVO">
+	<![CDATA[
+		select * from cart where likes_board_number = #{likes_board_number} 
+		and likes_member_number = #{likes_member_number}
+	]]> <!-- CDATA 사용 이유는 부등호인지 문자인지를 판단하지 말것 (문자처리) -->
+</select>
+
+<update id="set_status">
+<![CDATA[
+update board set status=#{status} 
+where board_number=#{board_number}
+and writer_number =#{writer_number}
+]]>
+</update>
+
+<insert id="insertSearch">
+<![CDATA[
+	insert into search_rank(title) values(#{title})
+]]>
+</insert>
+
+<select id="searchRank" resultType="BoardVO">
+	<![CDATA[
+		SELECT *
+		FROM (
+		    SELECT title, COUNT(*) AS count
+		    FROM search_rank
+		    GROUP BY title
+		    ORDER BY count DESC
+		)
+		WHERE ROWNUM <= 10
+	]]> <!-- CDATA 사용 이유는 부등호인지 문자인지를 판단하지 말것 (문자처리) -->
+</select>
+
+<select id="getMoreList" resultType="BoardVO"> <!-- id:메서드명, resultType:객체 -->
+	<![CDATA[
+	SELECT * FROM (
+    SELECT /*+index_desc(board pk_board_num) */
+        rownum rn, board_number, title, status, photo_name, regidate, updatedate, likes, interest,
+        price, views, board_address 
+    FROM (
+        SELECT * FROM board 
+        WHERE board_number > 0
+        ORDER BY 
+            CASE 
+                WHEN status = '판매중' THEN 1
+                WHEN status = '예약중' THEN 2
+                WHEN status = '판매완료' THEN 3
+                ELSE 4
+            END,
+            views DESC
+    ) 
+    WHERE rownum <= #{pageNum} * #{amount}
+) 
+WHERE rn > (#{pageNum} - 1) * #{amount}
+	]]> <!-- CDATA 사용 이유는 부등호인지 문자인지를 판단하지 말것 (문자처리) -->
+</select>
+
+<select id="getRecent" resultType="BoardVO">
+	<![CDATA[
+		SELECT * FROM (
+    SELECT /*+index_desc(board pk_board_num) */
+        rownum rn, board_number, title, status, photo_name, regidate, updatedate, likes, interest,
+        price, views, board_address 
+    FROM (
+        SELECT * FROM board 
+        WHERE board_number > 0
+        ORDER BY 
+            CASE 
+                WHEN status = '판매중' THEN 1
+                WHEN status = '예약중' THEN 2
+                WHEN status = '판매완료' THEN 3
+                ELSE 4
+            END,
+            GREATEST(regidate, updatedate) DESC
+    ) 
+    WHERE rownum <= #{pageNum} * #{amount}
+) 
+WHERE rn > (#{pageNum} - 1) * #{amount}
+	]]>
+</select>
+
+<select id="getTotalCount" resultType="int">
+	<![CDATA[
+		select count(*) from board where board_number > 0
+	]]> <!-- 게시물의 총 개수를 구한다. -->
+</select>
+
 	
 </mapper>

@@ -5,49 +5,79 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <!-- jstl 포메팅 태그용 -->
 <%@ include file="../common/header.jsp"%>
+<title>게시물 수정</title>
 <div class="formbold-main-wrapper">
 	<div class="formbold-form-wrapper">
-		<form action="/shop/modify" method="post">
+		<form action="/shop/modify" method="post" enctype="multipart/form-data">
 			<div class="formbold-form-title">
 				<h2>수정등록</h2>
 			</div>
 			<div class="file-input-wrapper">
-				<input type="file" accept="image/*" name="photo_name"> <img
-					id="image-preview" class="image-preview" src="" alt="미리보기 이미지">
+				<input type="file" accept="image/*" name="fileUpload" id="InputFile" multiple onchange="previewImages()">
+				<label for="InputFile">파일 선택</label>
+				<!-- 파일 선택을 위한 레이블 -->
+			</div>
+			<div class="image-container">
+				<button type="button" id="prevButton" class="button">
+					<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-caret-left" viewBox="0 0 16 16">
+					  <path d="M10 12.796V3.204L4.519 8zm-.659.753-5.48-4.796a1 1 0 0 1 0-1.506l5.48-4.796A1 1 0 0 1 11 3.204v9.592a1 1 0 0 1-1.659.753"/>
+					</svg>
+				</button>
+				
+				<div id="image-preview" class="image-preview-container"></div>
+				
+				<button type="button" id="nextButton" class="button">
+					<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-caret-right" viewBox="0 0 16 16">
+			  			<path d="M6 12.796V3.204L11.481 8zm.659.753 5.48-4.796a1 1 0 0 0 0-1.506L6.66 2.451C6.011 1.885 5 2.345 5 3.204v9.592a1 1 0 0 0 1.659.753"/>
+					</svg>
+				</button>
 			</div>
 			<div class="formbold-mb-3">
 				<div>
-					<label for="title" class="formbold-form-label">제목</label> <input
-						type="text" name="title" id="title" value='<c:out value="${ board.title }"/>' class="formbold-form-input"
-						required />
+					<label for="title" class="formbold-form-label">제목</label>
+					<input type="text" name="title" id="title" value='<c:out value="${ board.title }"/>' class="formbold-form-input" maxlength="20" required />
+					<small id="titleCount">0/20</small> <!-- 글자 수 표시 -->
 				</div>
 			</div>
 			<div class="formbold-mb-3">
 				<div>
-					<label for="price" class="formbold-form-label">가격</label> <input
-						type="text" name="price" id="price" value='<c:out value="${ board.price }"/>' class="formbold-form-input"
-						required />
+					<label for="price" class="formbold-form-label">가격</label>
+					<input type="text" name="price" id="price" value='<c:out value="${ board.price }"/>' class="formbold-form-input" maxlength="10" required />
+					<small id="priceCount">0/10</small>
 				</div>
 			</div>
 			<div class="formbold-mb-3">
-				<label for="content" class="formbold-form-label">내용</label> <input
-					type="text" name="content" id="content" value='<c:out value="${ board.content }"/>' class="formbold-form-input"
-					required />
+				<label for="content" class="formbold-form-label">내용</label>
+				<textarea name="content" id="content" class="formbold-form-input" maxlength="500" required /></textarea>
+				<small id="contentCount">0/500</small>
 			</div>
 
 			<div class="formbold-input-flex">
 				<div>
 					<select name="types" class="types" required>
-						<option value="" disabled selected>카테고리</option>
-						<option value="전자기기">전자기기</option>
-						<option value="옷">옷</option>
-						<option value="생활용품">생활용품</option>
-						<option value="스포츠용품">스포츠용품</option>
+						<option value="" disabled selected>카테고리 선택</option>
+						<option value="디지털기기">디지털기기</option>
+						<option value="생활가전">생활가전</option>
+						<option value="가구/인테리어">가구/인테리어</option>
+						<option value="생활/주방">생활/주방</option>
+						<option value="유아동">유아동</option>
+						<option value="유아도서">유아도서</option>
+						<option value="여성의류">여성의류</option>
+						<option value="여성잡화">여성잡화</option>
+						<option value="남성패션/잡화">남성패션/잡화</option>
+						<option value="뷰티/미용">뷰티/미용</option>
+						<option value="스포츠/레저">스포츠/레저</option>
+						<option value="취미/게임/음반">취미/게임/음반</option>
+						<option value="도서">도서</option>
+						<option value="티켓/교환권">티켓/교환권</option>
+						<option value="가공식품">가공식품</option>
+						<option value="건강기능식품">건강기능식품</option>
+						<option value="반려동물용품">반려동물용품</option>
+						<option value="식물">식물</option>
+						<option value="기타 중고물품">기타 중고물품</option>
+						<option value="삽니다">삽니다</option>
 					</select>
 				</div>
-			</div>
-			
-			<div class="formbold-input-flex">
 				<div>
 					<select name="status" class="status" required>
 						<option value="" disabled selected>상품상태</option>
@@ -61,7 +91,7 @@
 				<label for="supportCheckbox" class="formbold-checkbox-label">
 					<div class="formbold-relative">
 						<input type="checkbox" id="supportCheckbox"
-							class="formbold-input-checkbox" required />
+							class="formbold-input-checkbox" required />&nbsp;&nbsp;정의된 이용약관 및 정책에 동의합니다.
 						<div class="formbold-checkbox-inner">
 							<span class="formbold-opacity-0"> <svg width="11"
 									height="8" viewBox="0 0 11 8" fill="none"
@@ -72,18 +102,14 @@
                                     </svg>
 							</span>
 						</div>
-					</div> 정의된 이용약관 및 정책에 동의합니다.
+					</div>
 				</label>
 			</div>
+			<input type="hidden" name="board_number" value='<c:out value="${ board.board_number }"/>'>
+			<button type="submit" class="formbold-btn">등록하기</button>
+		</form>
 	</div>
 </div>
-<input type="hidden" name="board_number" value='<c:out value="${ board.board_number }"/>'>
-<button type="submit" class="formbold-btn">등록하기</button>
-	</form>
 
-
-
-
-
-
+<script src="/resources/js/board_register.js"></script>
 <%@ include file="../common/footer.jsp"%>

@@ -1,103 +1,8 @@
  <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
- 
+ <title>감자마켓</title>
   <!-- shop section -->
   <%@ include file="../common/header.jsp" %>
-  
-  <section class="slider_section">
-      <div class="slider_container" style='background-color:#83d5c9'>
-        <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
-          <div class="carousel-inner">
-            <div class="carousel-item active">
-              <div class="container-fluid">
-                <div class="row">
-                  <div class="col-md-7">
-                    <div class="detail-box">
-                      <h1>
-                        감자마켓에 오신 것을 <br>
-                        환영합니다!
-                      </h1>
-                      <p>
-                        감자에 싹이 나서 잎이 나서 감자감자 싹! 하나 빼기~
-                      </p>
-                      <a href="">
-                        Contact Us
-                      </a>
-                    </div>
-                  </div>
-                  <div class="col-md-5 ">
-                    <div class="img-box">
-                      <img src="images/potato.jpg" alt=""/>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="carousel-item ">
-              <div class="container-fluid">
-                <div class="row">
-                  <div class="col-md-7">
-                    <div class="detail-box">
-                      <h1>
-                        감자마켓에 오신 것을 <br>
-                        환영합니다!
-                      </h1>
-                      <p>
-                        감자에 싹이 나서 잎이 나서 감자감자 싹! 하나 빼기~
-                      </p>
-                      <a href="">
-                        Contact Us
-                      </a>
-                    </div>
-                  </div>
-                  <div class="col-md-5 ">
-                    <div class="img-box">
-                      <img src="images/potato.jpg" alt="" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="carousel-item ">
-              <div class="container-fluid">
-                <div class="row">
-                  <div class="col-md-7">
-                    <div class="detail-box">
-                      <h1>
-                        감자마켓에 오신 것을 <br>
-                        환영합니다!
-                      </h1>
-                      <p>
-                        감자에 싹이 나서 잎이 나서 감자감자 싹! 하나 빼기~
-                      </p>
-                      <a href="">
-                        Contact Us
-                      </a>
-                    </div>
-                  </div>
-                  <div class="col-md-5 ">
-                    <div class="img-box">
-                      <img src="images/potato.jpg" alt="" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="carousel_btn-box">
-            <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
-              <i class="fa fa-arrow-left" aria-hidden="true"></i>
-              <span class="sr-only">Previous</span>
-            </a>
-            <img src="images/line.png" alt="" />
-            <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
-              <i class="fa fa-arrow-right" aria-hidden="true"></i>
-              <span class="sr-only">Next</span>
-            </a>
-          </div>
-        </div>
-      </div>
-    </section>
   
   <section class="shop_section layout_padding">
     <div class="container">
@@ -111,7 +16,7 @@
           <div class="box">
             <a href="">
               <div class="img-box">
-                <img src="${pageContext.request.contextPath}/resources/images/p1.png" alt="">
+              <img src="${pageContext.request.contextPath}/resources/images/p2.png" alt="">
               </div>
               <div class="detail-box">
                 <h6>

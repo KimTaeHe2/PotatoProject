@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE mapper 
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.potato.mapper.Etc_mapper">
+
+<!-- 1.고객의 편지 등록 -->
+<insert id="send_coments">
+<![CDATA[
+insert into coments(message,id,ip_address)
+ values(#{message},#{id},#{ip_address})
+]]>
+</insert>
+
+<!-- 2.고객의 편지 리스트 가져오기 -->
+<select id="get_coments" resultType="ComentsVO">
+<![CDATA[
+select --+ INDEX(coments idx_coments)
+ * from coments order by regidate desc
+]]>
+</select>
+
+<!-- 3. QnA 게시글 작성 -->
+<insert id="add_qna">
+<![CDATA[
+insert into qna(qna_number,question,answer)
+ values(#{qna_number},#{question},#{answer})
+]]>
+</insert>
+
+<!-- 4. QnA 게시판 불러오기 -->
+<select id="read_qna" resultType="QnaVO">
+<![CDATA[
+select * from qna
+]]>
+</select>
+
+<!-- 5. QnA 게시글 수정 -->
+<update id="modify_qna">
+<![CDATA[
+update qna set question=#{question}, answer=#{answer} where qna_number=#{qna_number}
+]]>
+</update>
+
+<!-- 6. QnA 게시글 삭제 -->
+<delete id="delete_qna">
+<![CDATA[
+delete from qna where qna_number=#{qna_number}
+]]>
+</delete>
+
+
+</mapper>

@@ -1,11 +1,11 @@
 package com.potato.service;
 
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.potato.domain.ReplyVO;
+import com.potato.domain.ReplyPageDTO;
 import com.potato.domain.Reply_critera;
 import com.potato.mapper.ReplyMapper;
 
@@ -17,6 +17,7 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 @AllArgsConstructor
 public class ReplyServiceImpl implements ReplyService{
+	
 	@Setter(onMethod_ = @Autowired)
 	private ReplyMapper mapper;
 	
@@ -49,10 +50,9 @@ public class ReplyServiceImpl implements ReplyService{
 	}
 
 	@Override
-	public List<ReplyVO> getList(Reply_critera reCritera, String id) {
-		// 댓글 리스트 출력
-		log.info("ReplyServiceImpl.getList() 메서드 실행 게시물번호 : " + id);
-		return mapper.getListWithPaging(reCritera, id);
+	public ReplyPageDTO getListPage(Reply_critera reCritera, String member_number) {
+		// 댓글 갯수 구해서 리스트 출력
+		return new ReplyPageDTO(mapper.getCountById(member_number), mapper.getListWithPaging(reCritera, member_number));
 	}
 
 }

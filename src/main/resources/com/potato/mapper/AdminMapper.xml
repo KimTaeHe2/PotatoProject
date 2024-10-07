@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="com.potato.mapper.AdminMapper">
+  
+  <select id="getList" resultType="MemberVO">
+  <![CDATA[
+     select * from member where id = #{id}
+  ]]>
+  </select> <!-- 관리자 정보 확인(완) -->
+  
+  <select id="getMemberList" resultType="MemberVO">  
+  <![CDATA[
+         SELECT *
+    FROM member
+    WHERE id = #{id}
+  ]]>
+  </select> <!-- 회원 정보 검색 -->
+
+  
+  <insert id="insertBoard">
+  <![CDATA[
+		 INSERT INTO notification (writer, title, content, regidate, important, notice_number)
+    VALUES (
+      #{writer},
+      #{title},
+      #{content},
+      sysdate,
+      COALESCE(#{important}, 0),
+      notice_seq.nextval
+    )
+		]]>
+  </insert> <!-- 공지 추가 -->
+  
+  <delete id="deleteReport">
+  <![CDATA[
+     delete from notification where notice_number = #{notice_number} 
+  ]]>
+  </delete> <!-- 게시판 삭제 -->
+  
+  <delete id="replyDelete">
+  <![CDATA[
+     delete from reply where id= #{id} 
+  ]]>
+  </delete> <!-- 댓글 삭제 -->
+  
+  <select id="readReport" resultType="ReportVO">
+  <![CDATA[
+     select  * FROM reports where status=0 order by regidate desc
+  ]]>
+  </select> <!-- 신고내역 리스트(사용함) -->
+  
+  <update id="updateReport">
+  <![CDATA[
+     update reports
+     set
+     status = 1,
+     done_date = sysdate
+     where report_number=#{report_number}
+  ]]>
+  </update> <!-- 신고처리 (사용함) -->
+  
+   <select id="viewBlack" resultType="MemberVO">
+    <![CDATA[
+       select * from member where grade=4 order by regidate desc
+   ]]>
+   </select> <!-- 블랙리스트 확인 (사용함)-->
+   
+   <select id="viewWarning" resultType="MemberVO">
+    <![CDATA[
+       select * from member where grade=2 order by regidate desc
+   ]]>
+   </select> <!-- 경고회원 확인 (사용함)-->
+   
+   <select id="viewCommon" resultType="MemberVO">
+    <![CDATA[
+       select * from member where grade=0 order by regidate desc
+   ]]>
+   </select> <!-- 일반회원 확인 (사용함)-->
+   
+   <select id="viewExcellence" resultType="MemberVO">
+    <![CDATA[
+       select * from member where grade=3 order by regidate desc
+   ]]>
+   </select> <!-- 우수회원 확인 (사용함)-->
+   
+   <select id="viewAll" resultType="MemberVO">
+    <![CDATA[
+       select * from member order by regidate desc
+   ]]>
+   </select> <!-- 전체회원 확인 (사용함)-->
+   
+     
+  <update id="updateBlack">
+   <![CDATA[
+      update member set
+      grade = #{grade} ,
+      update_date = sysdate
+      where member_number = #{member_number}
+    ]]>
+  </update> <!-- 블랙리스트 등록 (사용함) -->
+  
+     <select id="get_report" resultType="ReportVO">
+  <![CDATA[
+     select  * FROM reports where report_number=#{report_number}
+  ]]>
+  </select> <!-- 신고내역 리스트(사용함) -->
+  
+ <select id="notification" resultType="NotificationVO">
+     SELECT * FROM notification  ORDER BY regidate desc
+</select> <!-- 관리자 공지 확인 -->
+  
+  <select id="notice" resultType="NotificationVO">
+  select * from notification where notice_number = #{notice_number}
+  </select>
+  
+  </mapper>

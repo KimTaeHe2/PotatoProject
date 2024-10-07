@@ -1,0 +1,121 @@
+ .alarm_list {
+  background-color: #fff8dc;
+  border: 1px solid #ffd700;
+  z-index: 1000;
+  width: 600px;
+  overflow-y: auto;
+  display: none;
+  position: fixed;
+  height: 100%;
+  max-height: 300px; /* 최대 높이 */
+  flex-direction: column;
+  font-family: Arial, sans-serif;
+  top: 135px; /* 높이 위치 */
+  box-sizing: border-box;
+}
+  
+.alarm_container ul {
+        list-style-type: none; /*점 제거 */
+        padding: 0; /* 기본 패딩 제거 */
+	    display: block;
+    	margin-block-start: 1em;
+    	margin-block-end: 1em;
+    	margin-inline-start: 0px;
+    	margin-inline-end: 0px;
+    	padding-inline-start: 40px;
+    	unicode-bidi: isolate;
+    } 
+ .alarm_container li {
+    display: list-item;
+    text-align: -webkit-match-parent;
+    unicode-bidi: isolate;
+    font-size: 1.0rem;
+    color: #000;
+}
+
+#alarm_list ul li {
+    border-bottom: 1px solid #ccc; /* 회색 실선 */
+    padding: 10px 0; /* 여백 추가 */
+}
+
+/* 마지막 li의 실선 제거 */
+#alarm_list ul li:last-child {
+    border-bottom: none; /* 마지막 항목의 실선 제거 */
+}
+    
+.alarm_header {
+	padding: 10px 28px 0;
+	position: relative;
+	line-height: 4rem;
+    color: #555558;
+}    
+
+/* 읽은 알림에 대한 스타일 */
+.readed_alarm {
+    background-color: #f0f0f0; /* 옅은 회색 */
+    transition: background-color 0.3s ease; /* 부드러운 색상 전환 효과 */
+}
+
+.readed_alarm:hover {
+    background-color: #e0e0e0; /* 호버 시 약간 더 진한 회색 */
+}
+
+/* 일반 알림 항목에 대한 스타일 (선택적) */
+.alarm_list li {
+    background-color: #ffffff; /* 기본 배경색 (흰색) */
+    transition: background-color 0.3s ease;
+}
+
+.alarm_list li:hover {
+    background-color: #f8f8f8; /* 호버 시 아주 옅은 회색 */
+}
+
+/* 알림 항목 공통 스타일 */
+.alarm_list li {
+    padding: 10px;
+    border-bottom: 1px solid #e0e0e0;
+    list-style-type: none;
+}
+
+.alarm_list li:last-child {
+    border-bottom: none;
+}
+
+.notification-actions {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+}
+
+.logo img {
+  
+  height: 50px;
+  margin-right: 10px;
+}
+
+.notification_bar, .notification_bar2 {
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: #FFF9C4; /* 노란색 배경 */
+    color: #000000; /* 검은색 글씨 */
+    text-align: center;
+    padding: 10px;
+    font-weight: bold;
+    z-index: 9999; /* 화면의 가장 앞으로 */
+    display: none; /* 기본적으로 숨김 */
+}
+
+.notification_bar {
+    top: 0;
+}
+
+.notification_bar2 {
+    top: 40px; /* notification_bar 아래에 위치 */
+}
